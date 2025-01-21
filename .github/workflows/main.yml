@@ -31,4 +31,4 @@ jobs:
         name: kernelandmodule
         path: |
           ${{ steps.build.outputs.outfile }}
-          ./drivers/memkernel/memkernel.ko
+          ./out/drivers/memkernel/memkernel.ko
