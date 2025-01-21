@@ -25,10 +25,15 @@ jobs:
         defconfig: vendor/xiaomi/miatoll_defconfig
         image: Image.gz-dtb
 
+    - name: Check if files exist
+      run: |
+        ls -l /github/workspace/out/drivers/memkernel/
+        ls -l /github/workspace/out/arch/arm64/boot/
+
     - name: Upload Kernel and Module
       uses: actions/upload-artifact@v4
       with:
         name: moduleandkernel
         path: |
-          ./out/drivers/memkernel/memkernel.ko
-          ./out/arch/arm64/boot/Image.gz-dtb
+          /github/workspace/out/drivers/memkernel/memkernel.ko
+          /github/workspace/out/arch/arm64/boot/Image.gz-dtb
