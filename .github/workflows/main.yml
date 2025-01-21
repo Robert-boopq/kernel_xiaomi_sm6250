@@ -31,4 +31,4 @@ jobs:
         name: kernelandmodule
         path: |
           ${{ steps.build.outputs.outfile }}
-          ./kernel_xiaomi_sm6250/drivers/memkernel/memkernel.ko
+          ./drivers/memkernel/memkernel.ko
