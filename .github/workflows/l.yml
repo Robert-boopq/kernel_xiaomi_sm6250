@@ -1,4 +1,4 @@
-name: Kernel Build81
+name: Kernel Build
 
 on:
   workflow_dispatch:
@@ -6,14 +6,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+
     steps:
+    # Шаг 1. Клонирование репозитория
     - name: Checkout kernel source
       uses: actions/checkout@v4
 
+    # Шаг 2. Настройка MemKernel
     - name: Set up MemKernel as a module (M-OUT) with specified name
       run: |
         curl -LSs "https://raw.githubusercontent.com/Poko-Apps/MemKernel/main/kernel/setup.sh" | bash -s M dogi
 
+    # Шаг 3. Сборка ядра
     - name: Android kernel build
       uses: lemniskett/android-kernel-actions@master
       id: build
@@ -24,3 +28,27 @@ jobs:
         compiler: clang/14
         defconfig: vendor/xiaomi/miatoll_defconfig
         image: Image.gz-dtb
+
+    # Шаг 4. Проверка существования файлов
+    - name: Verify kernel and module files
+      run: |
+        echo "Checking Image.gz-dtb"
+        ls -l ./out/arch/arm64/boot/Image.gz-dtb || echo "File not found: Image.gz-dtb"
+        echo "Checking memkernel.ko"
+        ls -l ./out/drivers/memkernel/memkernel.ko || echo "File not found: memkernel.ko"
+
+    # Шаг 5. Создание ZIP-архива
+    - name: Create ZIP archive
+      run: |
+        mkdir -p release
+        cp ./out/arch/arm64/boot/Image.gz-dtb release/
+        cp ./out/drivers/memkernel/memkernel.ko release/
+        cd release
+        zip -r kernel_package.zip *
+
+    # Шаг 6. Загрузка ZIP-архива как артефакта
+    - name: Upload Kernel ZIP
+      uses: actions/upload-artifact@v4
+      with:
+        name: Kernel-Package
+        path: release/kernel_package.zip
