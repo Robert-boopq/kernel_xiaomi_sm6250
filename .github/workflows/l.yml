@@ -1,4 +1,4 @@
-name: Kernel Build
+name: Kernel Miatoll
 
 on:
   workflow_dispatch:
