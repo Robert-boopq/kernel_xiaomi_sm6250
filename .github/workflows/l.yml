@@ -1,4 +1,4 @@
-name: Kernel Build12
+name: Kernel Build1
 
 on:
   workflow_dispatch:
@@ -37,11 +37,12 @@ jobs:
         echo "Checking memkernel.ko"
         ls -l ./out/drivers/memkernel/memkernel.ko || echo "File not found: memkernel.ko"
 
-    # Шаг 5. Загрузка артефактов, если они были созданы ранее
+    # Шаг 5. Загрузка артефактов (если они были загружены ранее)
     - name: Download existing artifacts
-      uses: actions/download-artifact@v2
+      uses: actions/download-artifact@v3
       with:
         name: Kernel-Package
+        path: ./downloaded_artifacts
 
     # Шаг 6. Создание ZIP-архива
     - name: Create ZIP archive
