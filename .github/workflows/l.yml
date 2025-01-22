@@ -1,4 +1,4 @@
-name: Kernel Miatoll
+name: Kernel Build12
 
 on:
   workflow_dispatch:
@@ -37,7 +37,13 @@ jobs:
         echo "Checking memkernel.ko"
         ls -l ./out/drivers/memkernel/memkernel.ko || echo "File not found: memkernel.ko"
 
-    # Шаг 5. Создание ZIP-архива
+    # Шаг 5. Загрузка артефактов, если они были созданы ранее
+    - name: Download existing artifacts
+      uses: actions/download-artifact@v2
+      with:
+        name: Kernel-Package
+
+    # Шаг 6. Создание ZIP-архива
     - name: Create ZIP archive
       run: |
         mkdir -p release
@@ -46,9 +52,10 @@ jobs:
         cd release
         zip -r kernel_package.zip *
 
-    # Шаг 6. Загрузка ZIP-архива как артефакта
+    # Шаг 7. Загрузка нового ZIP-архива как артефакта
     - name: Upload Kernel ZIP
       uses: actions/upload-artifact@v4
       with:
         name: Kernel-Package
         path: release/kernel_package.zip
+        
