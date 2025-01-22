@@ -24,11 +24,3 @@ jobs:
         compiler: clang/14
         defconfig: vendor/xiaomi/miatoll_defconfig
         image: Image.gz-dtb
-
-    - name: Upload Kernel and Module
-      uses: actions/upload-artifact@v4
-      with:
-        name: moduleandkernel
-        path: |
-          /github/workspace/out/drivers/memkernel/memkernel.ko
-          /github/workspace/out/arch/arm64/boot/Image.gz-dtb
